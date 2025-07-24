@@ -11,7 +11,7 @@ function ListaCategoria() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario } = useContext(AuthContext);
   const token = usuario.token;
 
   async function fetchCategorias() {
@@ -29,14 +29,14 @@ function ListaCategoria() {
 
   useEffect(() => {
     if (token === "") {
-      navigate("/login");
+      navigate("/home");
       toast.info("Você precisa estar logado para acessar essa página.");
     }
   }, [navigate, token]);
 
   useEffect(() => {
     fetchCategorias();
-  }, [handleLogout, token]);
+  }, []);
 
   return (
     <div className="flex my-8">
@@ -58,7 +58,7 @@ function ListaCategoria() {
                 lg:grid-cols-3 gap-8 w-full"
         >
           {categorias.map((categoria) => (
-            <CardCategoria key={categoria.id} categoria={categoria} />
+            <CardCategoria key={categoria.id} categoria={categoria} fetchApi={fetchCategorias} />
           ))}
         </div>
       </div>

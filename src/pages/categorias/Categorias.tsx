@@ -14,7 +14,7 @@ function Categorias() {
           </h1>
           <Button
             onClick={() => navigate("/novacategoria")}
-            className="bg-orange-600 hover:bg-orange-700 text-white flex items-center gap-2 shadow-sm"
+            className="bg-laranja-tema hover:bg-laranja-escuro text-white flex items-center gap-2 shadow-sm"
           >
             <Plus size={20} weight="bold" />
             Nova Categoria

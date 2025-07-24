@@ -19,14 +19,14 @@ import Swal from "sweetalert2";
 
 interface CardCategoriaProps {
   categoria: Categoria;
+  fetchApi: () => void;
 }
 
-export default function CardCategoria({ categoria }: CardCategoriaProps) {
-  const { usuario, handleLogout } = useContext(AuthContext);
-  const token = usuario.token;
+export default function CardCategoria({ categoria, fetchApi }: CardCategoriaProps) {
+  const { handleLogout } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
 
-    async function handleDelete(id: number) {
+    async function handleDelete() {
       Swal.fire({
         title: "Você tem certeza?",
         text: "Esta ação não poderá ser desfeita!",
@@ -48,8 +48,9 @@ export default function CardCategoria({ categoria }: CardCategoriaProps) {
     setIsLoading(true);
     try {
       await deletar(`/categoria/${categoria.id}`);
+      fetchApi();
+
       ToastAlerta("Categoria excluída com sucesso!", "sucesso");
-      window.location.reload();
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
       if (msg.includes("401") || msg.includes("403")) {
@@ -85,7 +86,7 @@ export default function CardCategoria({ categoria }: CardCategoriaProps) {
             <Button
               onClick={() => {
                 if (typeof categoria.id === "number") {
-                  handleDelete(categoria.id);
+                  handleDelete();
                 } else {
                   ToastAlerta("ID da categoria inválido!", "erro");
                 }

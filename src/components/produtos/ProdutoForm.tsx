@@ -39,7 +39,7 @@ const FormField = ({
 	<div>
 		<label
 			htmlFor={name}
-			className="block text-sm font-bold text-gray-700 mb-2"
+			className="block text-sm font-bold text-cinza-texto mb-2"
 		>
 			{label}
 		</label>
@@ -62,8 +62,11 @@ const FormField = ({
 export default function ProdutoForm() {
 	const navigate = useNavigate();
 	const { id } = useParams<{ id: string }>();
+	const { usuario } = useContext(AuthContext);
 
-	const { usuario, handleLogout } = useContext(AuthContext);
+	// ... (toda a lógica de useState, useEffect, handleChange, etc. continua a mesma)
+	const [categorias, setCategorias] = useState<Categoria[]>([]);
+	const [produto, setProduto] = useState<Produto>({} as Produto);
 	const token = usuario.token;
 
 	useEffect(() => {
@@ -71,34 +74,31 @@ export default function ProdutoForm() {
 			alert("Você precisa estar logado para acessar essa página.");
 			navigate("/login");
 		}
-	}, [token]);
-
-	// ... (toda a lógica de useState, useEffect, handleChange, etc. continua a mesma)
-	const [categorias, setCategorias] = useState<Categoria[]>([]);
-	const [produto, setProduto] = useState<Produto>({} as Produto);
+	}, [token, navigate]);
+	
 	useEffect(() => {
 		async function fetchData() {
 			try {
 				await buscar("/categoria", setCategorias);
-			} catch (error: any) {
+			} catch (error) {
 				if (error.toString().includes("401")) {
-					handleLogout();
+					navigate("/produtos");
 				}
 				toast.error("Erro ao buscar categorias.");
 			}
 			if (id) {
 				try {
-					await buscar(`/produtos/${id}`,(dados: Produto) => setProduto(dados));
-				} catch (error: any) {
+					await buscar(`/produtos/${id}`, setProduto);
+				} catch (error) {
 					if (error.toString().includes("401")) {
-						handleLogout();
+						navigate("/produtos");
 					}
 					toast.error("Erro ao buscar dados do produto.");
 				}
 			}
 		}
 		fetchData();
-	}, [id]);
+	}, [id, navigate]);
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -139,16 +139,16 @@ export default function ProdutoForm() {
 		try {
 			if (isEditing && produto.id) {
        			dadosParaApi.id = produto.id;
-				await atualizar(`/produtos`, dadosParaApi, () => {});
+				await atualizar(`/produtos`, dadosParaApi, setProduto);
 				toast.success("Produto atualizado com sucesso!");
 			} else {
-				await cadastrar(`/produtos`, dadosParaApi, () => {});
+				await cadastrar(`/produtos`, dadosParaApi, setProduto);
 				toast.success("Produto cadastrado com sucesso!");
 			}
 			navigate("/produtos");
-		} catch (error: any) {
+		} catch (error) {
       		if (error.toString().includes("401")) {
-				handleLogout();
+				navigate('/produtos')
 			}
 			toast.error(`Erro ao salvar produto.`);
 		}
@@ -161,7 +161,7 @@ export default function ProdutoForm() {
 				onSubmit={handleSubmit}
 				className="glass p-8 rounded-2xl shadow-lg w-full max-w-2xl my-2"
 			>
-				<h2 className="text-3xl font-bold text-center text-[#e54300] mb-8">
+				<h2 className="text-3xl font-bold text-center text-laranja-tema mb-8">
 					{isEditing ? "Editar Produto" : "Cadastrar Produto"}
 				</h2>
 
@@ -193,7 +193,7 @@ export default function ProdutoForm() {
 						<div>
 							<label
 								htmlFor="categoria"
-								className="block text-sm font-bold text-gray-700 mb-2"
+								className="block text-sm font-bold text-cinza-texto mb-2"
 							>
 								Categoria
 							</label>
@@ -201,7 +201,7 @@ export default function ProdutoForm() {
 								id="categoria"
 								name="categoria"
 								// Cor do anel de foco atualizada
-								className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#e54300]"
+								className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-laranja-tema"
 								value={produto.categoria?.id || ""}
 								onChange={handleCategoriaChange}
 								required
@@ -298,7 +298,7 @@ export default function ProdutoForm() {
 				<button
 					type="submit"
 					// Cores do botão principal atualizadas
-					className="w-full mt-8 bg-[#e54300] hover:bg-[#bf3700] text-white font-bold py-3 rounded-md transition-all duration-300"
+					className="w-full mt-8 bg-laranja-tema hover:bg-laranja-escuro cursor-pointer text-white font-bold py-3 rounded-md transition-all duration-300"
 				>
 					{isEditing ? "Atualizar Produto" : "Criar Produto"}
 				</button>

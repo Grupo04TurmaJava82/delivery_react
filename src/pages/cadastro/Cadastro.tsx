@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ValidationError } from "yup";
+import "@/utils/glass.css";
 
 import { cadastrarUsuario } from "@/services/Service";
 import { Label } from "@/components/ui/label";
@@ -148,11 +149,11 @@ function CadastroNovo() {
     switch (currentStep) {
       case 1:
         return (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-3">
             <div>
               <Label
                 htmlFor="nome"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Nome Completo *
               </Label>
@@ -172,7 +173,7 @@ function CadastroNovo() {
             <div>
               <Label
                 htmlFor="dataNascimento"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Data de Nascimento *
               </Label>
@@ -193,11 +194,11 @@ function CadastroNovo() {
         );
       case 2:
         return (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-3">
             <div>
               <Label
                 htmlFor="usuario"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Email *
               </Label>
@@ -218,7 +219,7 @@ function CadastroNovo() {
             <div>
               <Label
                 htmlFor="telefone"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Telefone *
               </Label>
@@ -240,11 +241,11 @@ function CadastroNovo() {
         );
       case 3:
         return (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-3">
             <div>
               <Label
                 htmlFor="senha"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Senha *
               </Label>
@@ -265,7 +266,7 @@ function CadastroNovo() {
             <div>
               <Label
                 htmlFor="confirmaSenha"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-cinza-texto mb-1"
               >
                 Confirmar Senha *
               </Label>
@@ -287,7 +288,7 @@ function CadastroNovo() {
         );
       case 4:
         return (
-          <div className="space-y-3">
+          <div className="flex flex-col gap-3">
             <div>
               <Label
                 htmlFor="foto"
@@ -370,99 +371,99 @@ function CadastroNovo() {
   };
 
   return (
-    <div className="min-h-screen flex items-stretch">
-      <div className="w-full flex items-center justify-center p-8 bg-gradient-to-br from-white to-orange-50">
-        <div className="w-full max-w-sm">
-          <Card className="rounded-2xl shadow-xl border-none p-6 bg-white">
-            <CardHeader className="text-center pb-6 space-y-2">
-              <CardTitle className="text-3xl font-bold text-orange-600">
-                {STEPS[currentStep - 1].title}
-              </CardTitle>
-              <CardDescription className="text-sm text-gray-500">
-                Preencha os campos abaixo para criar sua conta.
-                <br />
-                Etapa {currentStep} de {STEPS.length}
-              </CardDescription>
-              <div className="flex space-x-1.5 mt-4">
-                {STEPS.map((_, index) => (
-                  <div
-                    key={index}
-                    className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                      index < currentStep ? "bg-orange-500" : "bg-gray-200"
-                    }`}
-                  />
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent className="p-0 mt-6">
-              <div className="flex flex-col gap-4">
-                {renderStepContent()}
-                <div className="flex justify-between gap-3 mt-6">
-                  {currentStep > 1 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-1/2 py-2 text-sm font-semibold rounded-lg border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-800 transition-all duration-200"
-                      onClick={handlePrev}
-                      disabled={isLoading}
-                    >
-                      <ChevronLeft className="w-4 h-4 mr-2" />
-                      Voltar
-                    </Button>
-                  )}
-                  {currentStep < STEPS.length ? (
-                    <Button
-                      type="button"
-                      className={`py-2 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 transition-all duration-300 ${
-                        currentStep === 1 ? "w-full" : "w-1/2"
-                      } bg-orange-500 hover:bg-orange-600 text-white`}
-                      onClick={handleNext}
-                      disabled={isLoading}
-                    >
-                      Próximo
-                      <ChevronRight className="w-4 h-4 ml-2" />
-                    </Button>
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 to-laranja-tema">
+      <Card className="w-full max-w-sm rounded-2xl border-none p-8 bg-white glass mx-3 gap-3">
+        <CardHeader className="text-center pb-1">
+          <CardTitle className="text-3xl font-bold text-orange-600 mb-2">
+            {STEPS[currentStep - 1].title}
+          </CardTitle>
+          <CardDescription className="text-sm text-cinza-texto">
+            Etapa {currentStep} de {STEPS.length}
+            <div className="flex space-x-1.5 mt-4">
+              {STEPS.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-2 flex-1 rounded-full transition-all duration-300 ${
+                    index < currentStep ? "bg-orange-500" : "bg-gray-200"
+                  }`}
+                />
+              ))}
+            </div>
+            <br />
+            Preencha os campos abaixo para criar sua conta.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="flex flex-col gap-3">
+            {renderStepContent()}
+            <div className={`
+              flex w-full justify-between items-center mt-3 transition-all
+            `}>
+              <Button
+                type="button"
+                variant="outline"
+                className={`py-2 text-sm font-semibold rounded-lg border border-gray-300 text-cinza-texto hover:bg-gray-100 transition-[width,opacity,transform] duration-300 ease-in-out ${
+                  currentStep > 1
+                    ? "w-38 scale-100"
+                    : "w-0 absolute scale-0 pointer-events-none"
+                }`}
+                onClick={handlePrev}
+                disabled={isLoading}
+              >
+                <ChevronLeft className="w-4 h-4 mr-2" />
+                Voltar
+              </Button>
+              {currentStep < STEPS.length ? (
+                <Button
+                  type="button"
+                  className={`py-2 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 bg-laranja-tema hover:bg-laranja-escuro text-white transition-[width,opacity] duration-300 ease-in-out ${
+                    currentStep === 1 ? "w-full" : "w-38"
+                  }`}
+                  onClick={handleNext}
+                  disabled={isLoading}
+                >
+                  Próximo
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  disabled={isLoading}
+                  className="w-1/2 py-2 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white transition-all duration-300"
+                  onClick={handleSubmit(handleCadastrar)}
+                >
+                  {isLoading ? (
+                    <>
+                      <RotatingLines
+                        strokeColor="white"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="18"
+                        visible
+                      />
+                      Cadastrando...
+                    </>
                   ) : (
-                    <Button
-                      type="button"
-                      disabled={isLoading}
-                      className="w-1/2 py-2 text-sm font-semibold rounded-lg flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white transition-all duration-300"
-                      onClick={handleSubmit(handleCadastrar)}
-                    >
-                      {isLoading ? (
-                        <>
-                          <RotatingLines
-                            strokeColor="white"
-                            strokeWidth="5"
-                            animationDuration="0.75"
-                            width="18"
-                            visible
-                          />
-                          Cadastrando...
-                        </>
-                      ) : (
-                        "Cadastrar"
-                      )}
-                    </Button>
+                    "Cadastrar"
                   )}
-                </div>
-                <div className="text-center mt-6">
-                  <p className="text-sm text-gray-600">
-                    Já tem uma conta?{" "}
-                    <button
-                      type="button"
-                      onClick={() => navigate("/login")}
-                      className="text-orange-600 hover:text-orange-700 font-semibold underline-offset-2 hover:underline transition-colors duration-200"
-                    >
-                      Faça login
-                    </button>
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+                </Button>
+              )}
+            </div>
+            <div className="text-center mt-3">
+              <p className="text-sm text-cinza-texto">
+                Já tem uma conta?{" "}
+                <button
+                  type="button"
+                  onClick={() => navigate("/login")}
+                  className="text-orange-600 hover:text-orange-700 font-semibold underline-offset-2 hover:underline transition-colors duration-200"
+                >
+                  Faça login
+                </button>
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

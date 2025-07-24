@@ -50,7 +50,7 @@ export default function CardProduto({ produto, onDelete, onNutriscore, onNutrInf
 				</div>
 
 				{/* Preço com a nova cor principal */}
-				<p className="text-[#e54300] font-bold text-2xl mt-2">
+				<p className="text-laranja-tema font-bold text-2xl mt-2">
 					{produto.preco.toLocaleString("pt-BR", {
 						style: "currency",
 						currency: "BRL",

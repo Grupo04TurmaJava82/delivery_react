@@ -59,7 +59,9 @@ export default function FormCategorias() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const { usuario, handleLogout } = useContext(AuthContext);
+  // ... (toda a lógica de useState, useEffect, handleChange, etc. continua a mesma)
+  const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
+  const { usuario } = useContext(AuthContext);
   const token = usuario.token;
 
   useEffect(() => {
@@ -67,28 +69,24 @@ export default function FormCategorias() {
       alert("Você precisa estar logado para acessar essa página.");
       navigate("/login");
     }
-  }, [token]);
-
-  // ... (toda a lógica de useState, useEffect, handleChange, etc. continua a mesma)
-  const [categoria, setCategoria] = useState<Categoria>({} as Categoria);
+  }, [token, navigate]);
+  
   useEffect(() => {
     async function fetchData() {
       if (id) {
         try {
-          await buscar(
-            `/categoria/${id}`,
-            (dados: Categoria) => setCategoria(dados)
-          );
-        } catch (error: any) {
+          await buscar(`/categoria/${id}`, setCategoria);
+
+        } catch (error) {
           if (error.toString().includes("401")) {
-            handleLogout();
+            navigate('/categoria')
           }
           toast.error("Erro ao buscar dados da categoria.");
         }
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -97,6 +95,7 @@ export default function FormCategorias() {
       [name]: value
     }));
   };
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const dadosParaApi = { ...categoria };
@@ -104,16 +103,16 @@ export default function FormCategorias() {
     try {
       if (isEditing && categoria.id) {
         dadosParaApi.id = categoria.id;
-        await atualizar(`/categoria`, dadosParaApi, () => {});
+        await atualizar(`/categoria`, dadosParaApi, setCategoria);
         toast.success("Categoria atualizada com sucesso!");
       } else {
-        await cadastrar(`/categoria`, dadosParaApi, () => {});
+        await cadastrar(`/categoria`, dadosParaApi, setCategoria);
         toast.success("Categoria cadastrada com sucesso!");
       }
       navigate("/categorias");
-    } catch (error: any) {
+    } catch (error) {
       if (error.toString().includes("401")) {
-            handleLogout();
+            navigate('/categoria')
           }
       toast.error(`Erro ao salvar categoria.`);
     }
@@ -121,12 +120,12 @@ export default function FormCategorias() {
   const isEditing = !!id;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
+    <div className="flex justify-center items-center h-full bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-2xl"
       >
-        <h2 className="text-3xl font-bold text-center text-[#e54300] mb-8">
+        <h2 className="text-3xl font-bold text-center text-laranja-tema mb-8">
           {isEditing ? "Editar Categoria" : "Cadastrar Categoria"}
         </h2>
 
@@ -153,7 +152,7 @@ export default function FormCategorias() {
         <button
           type="submit"
           // Cores do botão principal atualizadas
-          className="w-full mt-8 bg-[#e54300] hover:bg-[#bf3700] text-white font-bold py-3 rounded-md transition-all duration-300"
+          className="w-full mt-8 bg-laranja-tema hover:bg-laranja-escuro cursor-pointer text-white font-bold py-3 rounded-md transition-all duration-300"
         >
           {isEditing ? "Atualizar Categoria" : "Criar Categoria"}
         </button>

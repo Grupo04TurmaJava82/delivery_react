@@ -10,7 +10,7 @@ export default function ProdutosPage() {
 				<Link
 					to="/novoproduto"
 					className="
-						bg-[#e54300] hover:bg-[#bf3700]
+						bg-laranja-tema hover:bg-laranja-escuro
 						text-white font-bold py-2 px-4 rounded-md 
 						transition-colors
 						flex items-center gap-2
